@@ -196,7 +196,7 @@ const HostPanel = {
         const quickScores = [-50, -10, 10, 50, 100];
         const lobbyInfo = ref(sync.lobby);
 
-        const isWaiting = computed(() => sync.inLobby && sync.lobby && sync.lobby.status === 'waiting');
+        const isWaiting = computed(() => lobbyInfo.value && lobbyInfo.value.status === 'waiting');
         const canStart = computed(() =>
             localState.value.team1Name.trim().length > 0 &&
             localState.value.team2Name.trim().length > 0
@@ -246,7 +246,11 @@ const HostPanel = {
         onMounted(() => {
             store.subscribe((newState) => { localState.value = newState; });
             sync.onLobby((lb) => { lobbyInfo.value = lb; });
+            sync.onStatus(() => { if (sync.lobby) lobbyInfo.value = sync.lobby; });
             window.addEventListener('lobby-updated', (e) => { lobbyInfo.value = e.detail; });
+            window.addEventListener('game-started', (e) => {
+                if (e.detail?.lobby) lobbyInfo.value = e.detail.lobby;
+            });
             window.addEventListener('keydown', onKey);
         });
 
