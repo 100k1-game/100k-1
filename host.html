@@ -6,29 +6,27 @@
     <title>100 к 1 — Панель ведущего</title>
     <script src="js/base-path.js"></script>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/utilities.css">
     <link rel="stylesheet" href="css/lobby.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.min.js"></script>
 </head>
-<body class="bg-[#050505] text-white min-h-screen relative">
+<body class="page-body">
     <div class="ambient-light bg-purple-600/15 w-[500px] h-[500px] top-0 right-0"></div>
 
-    <div id="app" v-cloak class="min-h-screen p-6 z-10 relative flex flex-col items-center">
-        <div class="w-full max-w-6xl mb-4 flex justify-between items-center">
-            <a href="index.html" class="text-gray-400 hover:text-white text-sm flex items-center">
-                <i class="fas fa-arrow-left mr-2"></i> Меню
-            </a>
-            <button v-if="inLobby" @click="openGame" class="btn-modern bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 px-4 py-2 rounded-xl text-sm flex items-center">
+    <div id="app" v-cloak class="page-wrap page-wrap--center">
+        <div class="toolbar-row">
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Меню</a>
+            <button v-if="inLobby" @click="openGame" class="btn-modern bg-blue-600/20 border border-blue-500/30 px-4 py-2 rounded-xl text-sm">
                 <i class="fas fa-tv mr-2"></i> Открыть табло
             </button>
         </div>
 
-        <div v-if="!inLobby" class="w-full max-w-md mb-6">
+        <div v-if="!inLobby" class="panel-narrow">
             <lobby-panel role="host"></lobby-panel>
         </div>
 
-        <host-panel v-if="inLobby"></host-panel>
+        <host-panel v-if="inLobby" class="panel-wide"></host-panel>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
@@ -49,8 +47,7 @@
                     window.addEventListener('sync-status', () => { inLobby.value = sync.inLobby; });
                 });
                 const openGame = () => {
-                    const key = sync.lobbyKey || sync.getSavedKey();
-                    window.open(APP_CONFIG.pageUrl('game.html', { key }), 'GameWindow');
+                    window.open(APP_CONFIG.pageUrl('game.html', { key: sync.lobbyKey || sync.getSavedKey() }), 'GameWindow');
                 };
                 return { inLobby, openGame };
             }

@@ -6,27 +6,25 @@
     <title>100 к 1 — Редактор</title>
     <script src="js/base-path.js"></script>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/utilities.css">
     <link rel="stylesheet" href="css/lobby.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 </head>
-<body class="bg-[#050505] text-white min-h-screen relative">
+<body class="page-body">
     <div class="ambient-light bg-green-600/15 w-[500px] h-[500px] bottom-0 left-0"></div>
 
-    <div id="app" v-cloak class="min-h-screen p-6 z-10 relative flex flex-col items-center">
-        <div class="w-full max-w-6xl mb-6">
-            <a href="index.html" class="text-gray-400 hover:text-white text-sm flex items-center">
-                <i class="fas fa-arrow-left mr-2"></i> Меню
-            </a>
+    <div id="app" v-cloak class="page-wrap page-wrap--center">
+        <div class="toolbar-row">
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Меню</a>
         </div>
 
-        <div v-if="!inLobby" class="w-full max-w-md mb-6">
+        <div v-if="!inLobby" class="panel-narrow">
             <lobby-panel role="editor"></lobby-panel>
         </div>
 
-        <editor-panel v-if="inLobby"></editor-panel>
+        <editor-panel v-if="inLobby" class="panel-wide"></editor-panel>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
