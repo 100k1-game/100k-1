@@ -14,6 +14,7 @@ createApp({
         const scoreAnim = ref({ team1: false, team2: false });
 
         const isWaiting = computed(() => inLobby.value && lobby.value && lobby.value.status === 'waiting');
+        const isPlaying = computed(() => inLobby.value && lobby.value && lobby.value.status === 'playing');
         const team1Ready = computed(() => state.value.team1Name && state.value.team1Name !== 'Команда 1');
         const team2Ready = computed(() => state.value.team2Name && state.value.team2Name !== 'Команда 2');
 
@@ -26,6 +27,11 @@ createApp({
             }
             return slots;
         });
+
+        const applyState = (s) => {
+            if (!s) return;
+            state.value = { ...store.getState(), ...s };
+        };
 
         const playSound = (id) => {
             const audio = document.getElementById(id);
@@ -73,14 +79,16 @@ createApp({
         watch(() => state.value.team2Score, (n, o) => { if (n !== o) flashScore(2); });
 
         onMounted(() => {
-            store.subscribe((s) => { if (s) state.value = s; });
+            store.subscribe((s) => { if (s) applyState(s); });
+            sync.onState((s) => applyState(s));
             sync.onStatus(refreshLobby);
             sync.onLobby((lb) => { lobby.value = lb; inLobby.value = true; });
             window.addEventListener('sync-status', refreshLobby);
-            window.addEventListener('lobby-updated', (e) => { lobby.value = e.detail; });
+            window.addEventListener('lobby-updated', (e) => { lobby.value = e.detail; inLobby.value = true; });
 
-            window.addEventListener('game-started', () => {
+            window.addEventListener('game-started', (e) => {
                 refreshLobby();
+                if (e.detail?.state) applyState(e.detail.state);
                 overlay.value = { type: 'steal', text: 'ПОЕХАЛИ!' };
                 countdown.value = 3;
                 const tick = () => {
@@ -91,9 +99,6 @@ createApp({
                 setTimeout(tick, 1000);
             });
 
-            const urlKey = new URLSearchParams(location.search).get('key');
-            if (urlKey && !sync.inLobby) sync.join(urlKey, 'display');
-
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'f' || e.key === 'F') {
                     if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
@@ -103,7 +108,7 @@ createApp({
         });
 
         return {
-            state, inLobby, lobby, lobbyKey, isWaiting, team1Ready, team2Ready, countdown,
+            state, inLobby, lobby, lobbyKey, isWaiting, isPlaying, team1Ready, team2Ready, countdown,
             displayAnswers, strikeShake, bankPulse, overlay, scoreAnim
         };
     }
