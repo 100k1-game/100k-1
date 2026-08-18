@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 к 1 — Табло</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/lobby.css">
+</head>
+<body class="game-body">
+
+    <div id="app" v-cloak>
+
+        <!-- 1. Join screen -->
+        <div v-if="!inLobby" class="min-h-screen flex flex-col items-center justify-center p-6 bg-[#060a12]">
+            <div class="waiting-logo mb-6">
+                <span class="waiting-logo-num">100</span>
+                <span class="waiting-logo-k">к</span>
+                <span class="waiting-logo-num">1</span>
+            </div>
+            <p class="text-gray-500 text-sm uppercase tracking-widest mb-8">Подключение табло</p>
+            <div class="w-full max-w-md">
+                <lobby-panel role="display"></lobby-panel>
+            </div>
+        </div>
+
+        <!-- 2. Waiting screen -->
+        <div v-else-if="isWaiting" class="waiting-screen">
+            <div class="waiting-logo">
+                <span class="waiting-logo-num">100</span>
+                <span class="waiting-logo-k">к</span>
+                <span class="waiting-logo-num">1</span>
+            </div>
+            <div class="waiting-pulse"><i class="fas fa-satellite-dish"></i></div>
+            <h2 class="waiting-title">Ожидание начала игры</h2>
+            <p class="waiting-sub">{{ lobby?.name }} · {{ lobbyKey }}</p>
+
+            <div class="waiting-teams">
+                <div class="waiting-team waiting-team--left" :class="{ 'waiting-team--filled': team1Ready }">
+                    <div class="waiting-team-label">Команда 1</div>
+                    <div class="waiting-team-name" :class="{ 'waiting-team-name--empty': !team1Ready }">
+                        {{ state.team1Name || 'Ожидаем...' }}
+                    </div>
+                </div>
+                <div class="waiting-vs">VS</div>
+                <div class="waiting-team waiting-team--right" :class="{ 'waiting-team--filled': team2Ready }">
+                    <div class="waiting-team-label">Команда 2</div>
+                    <div class="waiting-team-name" :class="{ 'waiting-team-name--empty': !team2Ready }">
+                        {{ state.team2Name || 'Ожидаем...' }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="waiting-status">
+                <span class="waiting-status-dot" :class="lobby?.hostOnline ? 'waiting-status-dot--host' : ''"></span>
+                <span v-if="lobby?.hostOnline">Ведущий настраивает команды...</span>
+                <span v-else>Ожидаем ведущего...</span>
+            </div>
+
+            <div v-if="countdown !== null" class="waiting-countdown mt-8">{{ countdown }}</div>
+        </div>
+
+        <!-- 3. Game board -->
+        <div v-else class="game-screen">
+            <div class="game-bg">
+                <div class="game-bg-grid"></div>
+                <div class="game-bg-glow game-bg-glow--left"></div>
+                <div class="game-bg-glow game-bg-glow--right"></div>
+            </div>
+
+            <div class="game-sync game-sync--on"><span class="game-sync-dot"></span> LIVE</div>
+            <div class="game-round">Раунд {{ state.roundNumber || 1 }}</div>
+
+            <header class="game-header">
+                <div class="game-team game-team--left" :class="{ 'game-team--active': state.activeTeam === 1 }">
+                    <div class="game-team-label">{{ state.team1Name || 'Команда 1' }}</div>
+                    <div class="game-team-score" :class="{ 'score-pop': scoreAnim.team1 }">{{ state.team1Score }}</div>
+                </div>
+                <div class="game-question-wrap">
+                    <transition name="question-fade" mode="out-in">
+                        <h1 v-if="state.currentQuestion" :key="state.currentQuestion.id" class="game-question">{{ state.currentQuestion.text }}</h1>
+                        <div v-else key="logo" class="game-logo">
+                            <span class="game-logo-num">100</span><span class="game-logo-k">к</span><span class="game-logo-num">1</span>
+                        </div>
+                    </transition>
+                </div>
+                <div class="game-team game-team--right" :class="{ 'game-team--active': state.activeTeam === 2 }">
+                    <div class="game-team-label">{{ state.team2Name || 'Команда 2' }}</div>
+                    <div class="game-team-score" :class="{ 'score-pop': scoreAnim.team2 }">{{ state.team2Score }}</div>
+                </div>
+            </header>
+
+            <div class="game-strikes" :class="{ 'game-shake': strikeShake }">
+                <div v-for="i in 3" :key="'s'+i" class="game-strike" :class="{ 'game-strike--on': state.strikes >= i }">✕</div>
+            </div>
+
+            <div class="game-board">
+                <div v-for="(answer, index) in displayAnswers" :key="index" class="game-slot">
+                    <transition name="answer-reveal" mode="out-in">
+                        <div v-if="answer && answer.revealed" class="game-answer game-answer--open">
+                            <span class="game-answer-num">{{ index + 1 }}</span>
+                            <span class="game-answer-text">{{ answer.text }}</span>
+                            <span class="game-answer-score">{{ answer.score }}</span>
+                        </div>
+                        <div v-else-if="answer" class="game-answer game-answer--hidden">
+                            <span class="game-answer-num">{{ index + 1 }}</span>
+                        </div>
+                        <div v-else class="game-answer game-answer--empty"></div>
+                    </transition>
+                </div>
+            </div>
+
+            <footer class="game-footer">
+                <div class="game-bank" :class="{ 'game-bank--pulse': bankPulse }">
+                    <span class="game-bank-label">Банк раунда</span>
+                    <span class="game-bank-value">{{ state.roundScore }}</span>
+                </div>
+            </footer>
+
+            <transition name="overlay-fade">
+                <div v-if="overlay" class="game-overlay" :class="'game-overlay--' + overlay.type">
+                    <div class="game-overlay-text">{{ overlay.text }}</div>
+                </div>
+            </transition>
+        </div>
+    </div>
+
+    <audio id="sound-reveal" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" preload="auto"></audio>
+    <audio id="sound-strike" src="https://actions.google.com/sounds/v1/alarms/buzzer_alarm.ogg" preload="auto"></audio>
+    <audio id="sound-steal" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" preload="auto"></audio>
+    <audio id="sound-start" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg" preload="auto"></audio>
+
+    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/lobby-keys.js"></script>
+    <script src="js/sync.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/components/LobbyPanel.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 к 1 — Панель ведущего</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/lobby.css">
+</head>
+<body class="bg-[#050505] text-white min-h-screen relative">
+    <div class="ambient-light bg-purple-600/15 w-[500px] h-[500px] top-0 right-0"></div>
+
+    <div id="app" v-cloak class="min-h-screen p-6 z-10 relative flex flex-col items-center">
+        <div class="w-full max-w-6xl mb-4 flex justify-between items-center">
+            <a href="index.html" class="text-gray-400 hover:text-white text-sm flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i> Меню
+            </a>
+            <button v-if="inLobby" @click="openGame" class="btn-modern bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 px-4 py-2 rounded-xl text-sm flex items-center">
+                <i class="fas fa-tv mr-2"></i> Открыть табло
+            </button>
+        </div>
+
+        <div v-if="!inLobby" class="w-full max-w-md mb-6">
+            <lobby-panel role="host"></lobby-panel>
+        </div>
+
+        <host-panel v-if="inLobby"></host-panel>
+    </div>
+
+    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/lobby-keys.js"></script>
+    <script src="js/sync.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/components/LobbyPanel.js"></script>
+    <script src="js/components/HostPanel.js"></script>
+    <script>
+        const { createApp, ref, onMounted } = Vue;
+        createApp({
+            components: { 'host-panel': HostPanel, 'lobby-panel': LobbyPanel },
+            setup() {
+                const inLobby = ref(sync.inLobby);
+                onMounted(() => {
+                    sync.onStatus(() => { inLobby.value = sync.inLobby; });
+                    window.addEventListener('sync-status', () => { inLobby.value = sync.inLobby; });
+                });
+                const openGame = () => {
+                    const key = sync.lobbyKey || sync.getSavedKey();
+                    window.open(APP_CONFIG.pageUrl('game.html', { key }), 'GameWindow');
+                };
+                return { inLobby, openGame };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
