@@ -4,9 +4,20 @@
 
 ## Деплой на GitHub Pages
 
-1. Загрузите проект на GitHub
-2. Settings → Pages → Source: **GitHub Actions**
-3. Push в `main` — сайт опубликуется автоматически
+1. Загрузите **все файлы и папки**: `css/`, `js/`, `index.html`, `game.html`, `host.html`, `editor.html`, `.nojekyll`
+2. Settings → Pages → Source: **GitHub Actions** (папка `.github` — для авто-деплоя)  
+   *или* Deploy from branch → `main` / root
+3. Push / обновите файлы на GitHub
+4. Откройте сайт и нажмите **Ctrl+F5** (жёсткое обновление)
+
+> **`.vscode`** — не нужна для сайта, это только настройки редактора.  
+> **`.github`** — не обязательна, если Pages включены вручную из ветки `main`.
+
+### Если стили не загрузились
+
+- Убедитесь, что на GitHub есть папка **`css/`** с файлами `style.css`, `game.css`, `lobby.css`
+- Убедитесь, что есть **`js/base-path.js`** (исправляет пути на GitHub Pages)
+- Название репозитория лучше латиницей, например `100k1` (без пробелов)
 
 Адрес: `https://ваш-логин.github.io/название-репо/`
 
