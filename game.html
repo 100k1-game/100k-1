@@ -6,10 +6,10 @@
     <title>100 к 1 — Табло</title>
     <script src="js/base-path.js"></script>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/utilities.css">
     <link rel="stylesheet" href="css/game.css">
     <link rel="stylesheet" href="css/lobby.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.min.js"></script>
 </head>
 <body class="game-body">
@@ -66,7 +66,7 @@
         </div>
 
         <!-- 3. Game board -->
-        <div v-else class="game-screen">
+        <div v-else-if="isPlaying" class="game-screen">
             <div class="game-bg">
                 <div class="game-bg-grid"></div>
                 <div class="game-bg-glow game-bg-glow--left"></div>
@@ -127,6 +127,12 @@
                     <div class="game-overlay-text">{{ overlay.text }}</div>
                 </div>
             </transition>
+        </div>
+
+        <!-- 4. Sync fallback -->
+        <div v-else class="min-h-screen flex flex-col items-center justify-center p-6 bg-[#060a12]">
+            <div class="spinner mx-auto mb-4"></div>
+            <p class="text-gray-400 text-sm">Синхронизация...</p>
         </div>
     </div>
 

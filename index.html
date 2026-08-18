@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>100 к 1 — Главное меню</title>
-    <meta name="description" content="Семейная викторина 100 к 1">
     <script src="js/base-path.js"></script>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/utilities.css">
     <link rel="stylesheet" href="css/lobby.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.min.js"></script>
@@ -20,34 +18,41 @@
         <h1 class="title-main text-glow">100 к 1</h1>
         <p class="subtitle-main">Семейная викторина</p>
 
-        <div class="menu-stack">
-            <button @click="openPage('game.html')" class="menu-btn btn-modern glass-panel menu-btn--blue">
-                <i class="fas fa-tv"></i> Табло
-            </button>
-            <button @click="openPage('host.html')" class="menu-btn btn-modern glass-panel menu-btn--purple">
-                <i class="fas fa-microphone"></i> Панель ведущего
-            </button>
-            <button @click="openPage('editor.html')" class="menu-btn btn-modern glass-panel menu-btn--green">
-                <i class="fas fa-edit"></i> Редактор вопросов
-            </button>
+        <!-- Шаг 1: ключ -->
+        <div v-if="!keyValidated" class="menu-stack" style="max-width:22rem;">
+            <div class="info-box glass-panel" style="border-radius:1rem;padding:1.5rem;">
+                <h3 style="justify-content:center;margin-bottom:1rem;"><i class="fas fa-key"></i> Ключ доступа</h3>
+                <input v-model="keyInput" @keyup.enter="validateKey" @input="formatInput"
+                       class="key-input w-full bg-black/50 text-white text-center text-xl font-mono font-bold tracking-[0.2em] px-4 py-3 rounded-xl border border-white/10 outline-none uppercase mb-3"
+                       placeholder="100K-XXXX-XXXX" maxlength="13" style="width:100%;">
+                <button @click="validateKey" class="menu-btn btn-modern glass-panel" style="width:100%;padding:0.875rem;">
+                    Продолжить
+                </button>
+                <p v-if="error" style="color:#f87171;font-size:0.75rem;text-align:center;margin-top:0.75rem;">{{ error }}</p>
+            </div>
         </div>
 
-        <div class="info-box glass-panel" style="border-radius:1rem;">
-            <h3><i class="fas fa-key"></i> Онлайн-игра</h3>
-            <ol>
-                <li>Ведущий вводит свой персональный ключ из KEYS.md</li>
-                <li>Отправляет ссылку на табло</li>
-                <li>Настраивает команды → «Начать игру»</li>
-            </ol>
-            <p class="hint">Ключи: см. KEYS.md</p>
-        </div>
+        <!-- Шаг 2: выбор роли -->
+        <template v-else>
+            <p style="color:#4ade80;font-size:0.8rem;margin-bottom:1rem;"><i class="fas fa-check-circle"></i> Ключ принят</p>
+            <div class="menu-stack">
+                <button @click="openPage('host.html')" class="menu-btn btn-modern glass-panel menu-btn--purple">
+                    <i class="fas fa-microphone"></i> Панель ведущего
+                </button>
+                <button @click="openPage('game.html')" class="menu-btn btn-modern glass-panel menu-btn--blue">
+                    <i class="fas fa-tv"></i> Табло
+                </button>
+                <button @click="openPage('editor.html')" class="menu-btn btn-modern glass-panel menu-btn--green">
+                    <i class="fas fa-edit"></i> Редактор
+                </button>
+            </div>
+        </template>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
     <script src="js/config.js"></script>
     <script src="js/lobby-keys.js"></script>
     <script src="js/sync.js"></script>
-    <script src="js/store.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
