@@ -1,0 +1,198 @@
+/* ===== Lobby & Waiting Screen ===== */
+
+.lobby-panel code {
+    background: none;
+}
+
+.lobby-slot:disabled, .lobby-slot.cursor-not-allowed {
+    pointer-events: none;
+}
+
+/* Waiting screen */
+.waiting-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, #060a12 0%, #0a1020 50%, #060a12 100%);
+    padding: 2rem;
+}
+
+.waiting-logo {
+    display: flex;
+    align-items: baseline;
+    gap: 0.1em;
+    margin-bottom: 2rem;
+}
+.waiting-logo-num { font-size: 5rem; font-weight: 900; color: #fff; }
+.waiting-logo-k { font-size: 3.5rem; font-weight: 900; color: #fbbf24; }
+
+.waiting-pulse {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid rgba(59,130,246,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    animation: waitingPulse 2s ease-in-out infinite;
+}
+.waiting-pulse i { font-size: 2rem; color: #3b82f6; }
+
+@keyframes waitingPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59,130,246,0.3); }
+    50% { transform: scale(1.05); box-shadow: 0 0 30px 10px rgba(59,130,246,0.15); }
+}
+
+.waiting-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+}
+
+.waiting-sub {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+
+.waiting-teams {
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.waiting-team {
+    min-width: 220px;
+    padding: 1.5rem 2rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    text-align: center;
+    transition: all 0.5s ease;
+}
+.waiting-team--left { border-left: 3px solid #3b82f6; }
+.waiting-team--right { border-right: 3px solid #a855f7; }
+.waiting-team--filled {
+    background: rgba(255,255,255,0.06);
+    transform: scale(1.03);
+}
+
+.waiting-team-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 0.75rem;
+}
+.waiting-team-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    min-height: 2rem;
+    transition: all 0.3s ease;
+}
+.waiting-team-name--empty {
+    color: rgba(255,255,255,0.15);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+.waiting-vs {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.15);
+}
+
+.waiting-status {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.3);
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.5);
+}
+.waiting-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: blink 1.5s ease infinite;
+}
+.waiting-status-dot--host { background: #a855f7; }
+.waiting-status-dot--ready { background: #4ade80; animation: none; }
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.waiting-countdown {
+    font-size: 6rem;
+    font-weight: 900;
+    color: #fbbf24;
+    text-shadow: 0 0 40px rgba(251,191,36,0.4);
+    animation: countPop 1s ease;
+}
+
+@keyframes countPop {
+    0% { transform: scale(2); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Host lobby setup */
+.lobby-setup {
+    background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(168,85,247,0.08) 100%);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.lobby-setup-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.start-game-btn {
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 1rem;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(37,99,235,0.3);
+}
+.start-game-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(37,99,235,0.4);
+}
+.start-game-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.game-start-transition-enter-active { transition: all 0.8s ease; }
+.game-start-transition-leave-active { transition: all 0.5s ease; }
+.game-start-transition-enter-from { opacity: 0; transform: scale(1.1); }
+.game-start-transition-leave-to { opacity: 0; }
