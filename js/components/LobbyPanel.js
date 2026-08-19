@@ -8,19 +8,18 @@ const LobbyPanel = {
 
             <div v-else-if="!inLobby">
                 <div class="text-center mb-5">
-                    <i class="fas fa-key text-yellow-400 text-2xl mb-2"></i>
-                    <p class="text-sm text-gray-400">Введите ваш ключ доступа</p>
+                    <h3 style="justify-content:center;margin-bottom:1.5rem;font-size:1.25rem;font-weight:700;"><i class="fas fa-key text-yellow-400"></i> Введите код комнаты</h3>
                 </div>
 
                 <input v-model="keyInput" @keyup.enter="joinWithKey" @input="formatInput"
-                       class="key-input w-full bg-black/50 text-white text-center text-xl font-mono font-bold tracking-[0.2em] px-4 py-3 rounded-xl border border-white/10 focus:border-blue-500/50 outline-none uppercase mb-3"
-                       placeholder="100K-XXXX-XXXX" maxlength="13">
+                       class="key-input glass-card mb-4"
+                       placeholder="100K-XXXX-XXXX" maxlength="14">
 
-                <button @click="joinWithKey" class="btn-modern w-full bg-blue-600/40 hover:bg-blue-600/60 border border-blue-500/40 py-3 rounded-xl font-bold text-sm">
+                <button @click="joinWithKey" class="btn-modern w-full glass-panel py-3 rounded-xl font-bold text-sm mt-2">
                     <i class="fas fa-sign-in-alt mr-2"></i> Подключиться
                 </button>
 
-                <p v-if="error" class="text-red-400 text-xs mt-3 text-center">{{ error }}</p>
+                <p v-if="error" class="error-text">{{ error }}</p>
             </div>
 
             <div v-else>
@@ -97,7 +96,25 @@ const LobbyPanel = {
         });
 
         const formatInput = () => {
-            keyInput.value = keyInput.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
+            error.value = '';
+            let val = keyInput.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if (val.startsWith('100K')) {
+                val = val.substring(4);
+            }
+            if (val.length === 0) {
+                keyInput.value = '';
+                return;
+            }
+            // Форматируем как 100K-XXXX-XXXX
+            let formatted = '100K';
+            if (val.length > 0) formatted += '-' + val.substring(0, 4);
+            if (val.length > 4) formatted += '-' + val.substring(4, 8);
+            
+            keyInput.value = formatted;
+
+            if (formatted.length === 14 && !inLobby.value) {
+                joinWithKey();
+            }
         };
 
         const joinWithKey = () => {
