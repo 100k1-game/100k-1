@@ -23,7 +23,7 @@
     <div id="app" v-cloak>
 
         <!-- 1. Join screen -->
-        <div v-if="!inLobby" class="min-h-screen flex flex-col items-center justify-center p-6 bg-[#060a12]">
+        <div v-if="!inLobby" class="min-h-screen flex flex-col items-center justify-center p-6 bg-black">
             <div class="waiting-logo mb-6">
                 <span class="waiting-logo-num">100</span>
                 <span class="waiting-logo-k">к</span>
@@ -147,7 +147,7 @@
         </div>
 
         <!-- 4. Sync fallback -->
-        <div v-else class="min-h-screen flex flex-col items-center justify-center p-6 bg-[#060a12]">
+        <div v-else class="min-h-screen flex flex-col items-center justify-center p-6 bg-black">
             <div class="spinner mx-auto mb-4"></div>
             <p class="text-gray-400 text-sm">Синхронизация...</p>
         </div>
