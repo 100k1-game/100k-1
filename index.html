@@ -19,16 +19,16 @@
         <p class="subtitle-main">Семейная викторина</p>
 
         <!-- Шаг 1: ключ -->
-        <div v-if="!keyValidated" class="menu-stack" style="max-width:22rem;">
-            <div class="info-box glass-panel" style="border-radius:1rem;padding:1.5rem;">
-                <h3 style="justify-content:center;margin-bottom:1rem;"><i class="fas fa-key"></i> Ключ доступа</h3>
+        <div v-if="!keyValidated" class="menu-stack" style="max-width:24rem;">
+            <div class="info-box glass-panel" style="border-radius:1.5rem;padding:2rem;text-align:center;">
+                <h3 style="justify-content:center;margin-bottom:1.5rem;font-size:1.25rem;font-weight:700;"><i class="fas fa-key"></i> Введите код комнаты</h3>
                 <input v-model="keyInput" @keyup.enter="validateKey" @input="formatInput"
-                       class="key-input w-full bg-black/50 text-white text-center text-xl font-mono font-bold tracking-[0.2em] px-4 py-3 rounded-xl border border-white/10 outline-none uppercase mb-3"
-                       placeholder="100K-XXXX-XXXX" maxlength="13" style="width:100%;">
-                <button @click="validateKey" class="menu-btn btn-modern glass-panel" style="width:100%;padding:0.875rem;">
-                    Продолжить
+                       class="key-input glass-card"
+                       placeholder="100K-XXXX-XXXX" maxlength="14">
+                <button @click="validateKey" class="menu-btn btn-modern glass-panel" style="width:100%;padding:1rem;margin-top:1rem;font-size:1.125rem;">
+                    Подключиться
                 </button>
-                <p v-if="error" style="color:#f87171;font-size:0.75rem;text-align:center;margin-top:0.75rem;">{{ error }}</p>
+                <p v-if="error" class="error-text">{{ error }}</p>
             </div>
         </div>
 
