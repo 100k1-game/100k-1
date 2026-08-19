@@ -3,7 +3,7 @@
 .game-body {
     margin: 0;
     overflow: hidden;
-    background: #060a12;
+    background: #000000;
     font-family: 'Montserrat', sans-serif;
     color: #fff;
     height: 100vh;
@@ -14,7 +14,7 @@
     position: fixed;
     inset: 0;
     z-index: 0;
-    background: linear-gradient(180deg, #060a12 0%, #0c1220 50%, #060a12 100%);
+    background: linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #000000 100%);
 }
 
 .game-bg-grid {
