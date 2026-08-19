@@ -410,6 +410,25 @@ const HostPanel = {
 
         const startGame = () => {
             if (!canStart.value) return;
+            
+            // Если вопрос не выбран, автоматически загружаем первый доступный
+            if (!localState.value.currentQuestion) {
+                const available = (localState.value.questions || []).filter(q => !(localState.value.usedQuestionIds || []).includes(q.id));
+                const pool = available.length > 0 ? available : localState.value.questions;
+                if (pool && pool.length > 0) {
+                    // Используем логику loadQuestion, но без вызова syncState, так как он вызовется ниже
+                    localState.value.currentQuestion = JSON.parse(JSON.stringify(pool[0]));
+                    localState.value.currentQuestion.answers.forEach(a => a.revealed = false);
+                    localState.value.roundScore = 0;
+                    localState.value.strikes = 0;
+                    if (!localState.value.usedQuestionIds) localState.value.usedQuestionIds = [];
+                    if (pool[0].id && !localState.value.usedQuestionIds.includes(pool[0].id)) {
+                        localState.value.usedQuestionIds.push(pool[0].id);
+                    }
+                    localState.value.lastAction = { type: 'newQuestion', timestamp: Date.now() };
+                }
+            }
+            
             store.update(localState.value);
             sync.startGame();
         };
