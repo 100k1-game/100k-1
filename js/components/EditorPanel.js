@@ -29,6 +29,9 @@ const EditorPanel = {
                 </h3>
                 
                 <div class="mb-5">
+                    <label class="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">Тема (опционально)</label>
+                    <input v-model="currentForm.theme" class="w-full bg-black/40 text-yellow-300 px-4 py-2 rounded-xl border border-white/10 focus:border-yellow-500/50 outline-none text-sm transition-all mb-4" placeholder="Например: Супер-раунд">
+                    
                     <label class="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">Текст вопроса</label>
                     <input v-model="currentForm.text" class="w-full bg-black/40 text-white px-4 py-3 rounded-xl border border-white/10 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 outline-none text-lg transition-all" placeholder="Например: Что чаще всего забывают дома?">
                 </div>
@@ -126,6 +129,7 @@ const EditorPanel = {
         
         const getEmptyForm = () => ({
             text: '',
+            theme: '',
             answers: [
                 { text: '', score: 0 },
                 { text: '', score: 0 },
@@ -170,6 +174,7 @@ const EditorPanel = {
             const questionData = {
                 id: Date.now().toString(),
                 text: currentForm.value.text,
+                theme: currentForm.value.theme,
                 answers: validAnswers.sort((a, b) => b.score - a.score) // Sort by score descending
             };
             

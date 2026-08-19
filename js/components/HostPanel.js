@@ -88,7 +88,7 @@ const HostPanel = {
                                 {{ localState.activeTeam === 1 ? '● Активна' : 'Сделать активной' }}
                             </button>
                         </div>
-                        <div class="text-xl font-bold text-gray-600 pt-8">VS</div>
+                        <div class="text-xl font-bold text-gray-600 self-center mb-6">VS</div>
                         <div class="w-[45%]">
                             <input v-model="localState.team2Name" @change="syncState" class="w-full bg-black/40 text-purple-300 px-3 py-2 rounded-xl mb-3 text-center font-medium border border-white/5 focus:border-purple-500/50 focus:outline-none" placeholder="Команда 2">
                             <div class="flex items-center justify-center flex-wrap gap-1 mb-2">
@@ -166,7 +166,7 @@ const HostPanel = {
                 </div>
                 <div v-else class="text-gray-500 text-sm mb-6 p-6 text-center border border-dashed border-white/10 rounded-xl">Вопрос не выбран</div>
 
-                <div class="max-h-52 overflow-y-auto bg-black/20 rounded-xl p-2 border border-white/5">
+                <div class="max-h-80 overflow-y-auto bg-black/20 rounded-xl p-2 border border-white/5">
                     <div v-if="filteredQuestions.length === 0" class="text-gray-500 text-sm text-center py-6">Нет вопросов</div>
                     <div v-for="(q, idx) in filteredQuestions" :key="q.id || idx"
                          class="flex justify-between items-center p-3 rounded-lg mb-1 transition-colors border"
