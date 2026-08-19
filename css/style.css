@@ -166,8 +166,8 @@ body {
 
 .key-input {
     width: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    color: #ffffff;
+    background: rgba(0, 0, 0, 0.5) !important;
+    color: #ffffff !important;
     text-align: center;
     font-size: 1.5rem;
     font-family: 'Courier New', Courier, monospace;
@@ -180,6 +180,14 @@ body {
     text-transform: uppercase;
     transition: all 0.3s ease;
     box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+.key-input:-webkit-autofill,
+.key-input:-webkit-autofill:hover, 
+.key-input:-webkit-autofill:focus, 
+.key-input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #1a1a1a inset !important;
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s;
 }
 .key-input:focus {
     border-color: #3b82f6;
