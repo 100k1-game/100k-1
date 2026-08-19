@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <script src="js/base-path.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/game.css">
     <link rel="stylesheet" href="css/lobby.css">
@@ -80,27 +83,38 @@
             <div class="game-round">Раунд {{ state.roundNumber || 1 }}</div>
 
             <header class="game-header">
-                <div class="game-team game-team--left" :class="{ 'game-team--active': state.activeTeam === 1 }">
-                    <div class="game-team-label">{{ state.team1Name || 'Команда 1' }}</div>
-                    <div class="game-team-score" :class="{ 'score-pop': scoreAnim.team1 }">{{ state.team1Score }}</div>
+                <div class="game-team-wrapper game-team-wrapper--left">
+                    <div class="game-team-strikes" :class="{ 'game-shake': strikeShake && state.activeTeam === 1 }">
+                        <div v-for="i in 3" :key="'t1s'+i" class="game-strike" :class="{ 'game-strike--on': state.activeTeam === 1 && state.strikes >= i }">✕</div>
+                    </div>
+                    <div class="game-team game-team--left" :class="{ 'game-team--active': state.activeTeam === 1 }">
+                        <div class="game-team-label">{{ state.team1Name || 'Команда 1' }}</div>
+                        <div class="game-team-score" :class="{ 'score-pop': scoreAnim.team1 }">{{ state.team1Score }}</div>
+                    </div>
                 </div>
+
                 <div class="game-question-wrap">
                     <transition name="question-fade" mode="out-in">
-                        <h1 v-if="state.currentQuestion" :key="state.currentQuestion.id" class="game-question">{{ state.currentQuestion.text }}</h1>
+                        <div v-if="state.currentQuestion" :key="state.currentQuestion.id" class="game-question-inner">
+                            <div class="game-question-theme" v-if="state.currentQuestion.theme">{{ state.currentQuestion.theme }}</div>
+                            <h1 class="game-question">{{ state.currentQuestion.text }}</h1>
+                        </div>
                         <div v-else key="logo" class="game-logo">
                             <span class="game-logo-num">100</span><span class="game-logo-k">к</span><span class="game-logo-num">1</span>
                         </div>
                     </transition>
                 </div>
-                <div class="game-team game-team--right" :class="{ 'game-team--active': state.activeTeam === 2 }">
-                    <div class="game-team-label">{{ state.team2Name || 'Команда 2' }}</div>
-                    <div class="game-team-score" :class="{ 'score-pop': scoreAnim.team2 }">{{ state.team2Score }}</div>
+
+                <div class="game-team-wrapper game-team-wrapper--right">
+                    <div class="game-team-strikes" :class="{ 'game-shake': strikeShake && state.activeTeam === 2 }">
+                        <div v-for="i in 3" :key="'t2s'+i" class="game-strike" :class="{ 'game-strike--on': state.activeTeam === 2 && state.strikes >= i }">✕</div>
+                    </div>
+                    <div class="game-team game-team--right" :class="{ 'game-team--active': state.activeTeam === 2 }">
+                        <div class="game-team-label">{{ state.team2Name || 'Команда 2' }}</div>
+                        <div class="game-team-score" :class="{ 'score-pop': scoreAnim.team2 }">{{ state.team2Score }}</div>
+                    </div>
                 </div>
             </header>
-
-            <div class="game-strikes" :class="{ 'game-shake': strikeShake }">
-                <div v-for="i in 3" :key="'s'+i" class="game-strike" :class="{ 'game-strike--on': state.strikes >= i }">✕</div>
-            </div>
 
             <div class="game-board">
                 <div v-for="(answer, index) in displayAnswers" :key="index" class="game-slot">
