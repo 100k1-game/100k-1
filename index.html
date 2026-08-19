@@ -40,15 +40,10 @@
         <!-- Шаг 2: выбор роли -->
         <template v-else>
             <p style="color:#4ade80;font-size:0.8rem;margin-bottom:1rem;"><i class="fas fa-check-circle"></i> Ключ принят</p>
+            <p style="color:#a1a1aa;font-size:0.8rem;margin-bottom:1rem;max-width:24rem;text-align:center;">Если вкладки не открылись автоматически, разрешите всплывающие окна или нажмите кнопку ниже.</p>
             <div class="menu-stack">
-                <button @click="openPage('host.html')" class="menu-btn btn-modern glass-panel menu-btn--purple">
-                    <i class="fas fa-microphone"></i> Панель ведущего
-                </button>
-                <button @click="openPage('game.html')" class="menu-btn btn-modern glass-panel menu-btn--blue">
-                    <i class="fas fa-tv"></i> Табло
-                </button>
-                <button @click="openPage('editor.html')" class="menu-btn btn-modern glass-panel menu-btn--green">
-                    <i class="fas fa-edit"></i> Редактор
+                <button @click="openAllPages" class="menu-btn btn-modern glass-panel menu-btn--purple">
+                    <i class="fas fa-external-link-alt"></i> Открыть все панели
                 </button>
             </div>
         </template>
