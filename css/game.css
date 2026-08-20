@@ -138,7 +138,7 @@
 }
 
 .game-team {
-    background: rgba(255,255,255,0.03);
+    background: #000000;
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 1rem;
     padding: 1.25rem 1.5rem;
@@ -149,7 +149,7 @@
 .game-team--left { border-left: 3px solid #3b82f6; }
 .game-team--right { border-right: 3px solid #a855f7; }
 .game-team--active {
-    background: rgba(255,255,255,0.06);
+    background: #050505;
     box-shadow: 0 0 30px rgba(59,130,246,0.15);
     transform: scale(1.02);
 }
@@ -185,7 +185,7 @@
 
 /* Question */
 .game-question-wrap {
-    background: rgba(0,0,0,0.5);
+    background: #000000;
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 1.25rem;
     padding: 1.5rem 2rem;
@@ -264,7 +264,7 @@
 }
 
 .game-answer--hidden {
-    background: linear-gradient(135deg, rgba(30,58,95,0.8) 0%, rgba(15,23,42,0.9) 100%);
+    background: #000000;
     border: 1px solid rgba(59,130,246,0.2);
     justify-content: center;
 }
@@ -330,7 +330,7 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    background: rgba(0,0,0,0.6);
+    background: #000000;
     border: 2px solid rgba(251,191,36,0.3);
     border-radius: 999px;
     padding: 0.75rem 2.5rem;
