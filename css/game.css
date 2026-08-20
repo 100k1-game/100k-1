@@ -14,7 +14,7 @@
     position: fixed;
     inset: 0;
     z-index: 0;
-    background: linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #000000 100%);
+    background: #000000;
 }
 
 .game-bg-grid {
@@ -23,20 +23,13 @@
     background-image:
         linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 90%);
 }
 
 .game-bg-glow {
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    border-radius: 50%;
-    filter: blur(120px);
-    opacity: 0.15;
+    display: none;
 }
-.game-bg-glow--left { top: -200px; left: -200px; background: #2563eb; }
-.game-bg-glow--right { bottom: -200px; right: -200px; background: #7c3aed; }
 
 .game-screen {
     position: relative;
@@ -275,8 +268,8 @@
 }
 
 .game-answer--open {
-    background: linear-gradient(90deg, rgba(34,197,94,0.15) 0%, rgba(255,255,255,0.05) 100%);
-    border: 1px solid rgba(34,197,94,0.4);
+    background: #000000;
+    border: 1px solid rgba(255,255,255,0.1);
     border-left: 4px solid #22c55e;
     padding: 0 1rem;
     box-shadow: 0 0 20px rgba(34,197,94,0.1);
