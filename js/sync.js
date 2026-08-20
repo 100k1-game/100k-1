@@ -3,7 +3,8 @@ const PEER_SERVER = {
     host: '0.peerjs.com',
     port: 443,
     path: '/',
-    secure: true
+    secure: true,
+    pingInterval: 5000
 };
 
 const sync = {
@@ -103,6 +104,12 @@ const sync = {
             this._emitJoined();
         });
 
+        this.peer.on('disconnected', () => {
+            if (this.peer && !this.peer.destroyed) {
+                this.peer.reconnect();
+            }
+        });
+
         this.peer.on('connection', (conn) => {
             conn.on('open', () => {
                 if (!this.connections.includes(conn)) this.connections.push(conn);
@@ -129,6 +136,9 @@ const sync = {
         this.peer.on('error', (err) => {
             if (err.type === 'unavailable-id') {
                 this._error('Этот ключ уже используется другим ведущим');
+            } else if (err.type === 'network' || err.message.includes('Lost connection')) {
+                console.warn('PeerJS network error:', err);
+                // Игнорируем показ ошибки, так как работает авто-реконнект
             } else {
                 this._error('Ошибка: ' + (err.message || err.type));
             }
@@ -141,7 +151,20 @@ const sync = {
 
         this.peer = new Peer(undefined, PEER_SERVER);
         this.peer.on('open', () => this._connectToHost(lobby, role, 0));
-        this.peer.on('error', () => this._error('Ошибка сети. Обновите страницу.'));
+        
+        this.peer.on('disconnected', () => {
+            if (this.peer && !this.peer.destroyed) {
+                this.peer.reconnect();
+            }
+        });
+
+        this.peer.on('error', (err) => {
+            if (err.type === 'network' || (err.message && err.message.includes('Lost connection'))) {
+                console.warn('PeerJS network error:', err);
+            } else {
+                this._error('Ошибка сети. Обновите страницу.');
+            }
+        });
     },
 
     _connectToHost(lobby, role, attempt) {
