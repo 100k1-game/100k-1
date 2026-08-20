@@ -4,7 +4,12 @@ const HostPanel = {
             <div class="absolute top-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[80px] pointer-events-none"></div>
 
             <div class="flex justify-between items-center mb-6 relative z-10">
-                <h2 class="text-3xl font-bold tracking-wide text-glow">Панель ведущего</h2>
+                <div class="flex items-center gap-4">
+                    <h2 class="text-3xl font-bold tracking-wide text-glow">Панель ведущего</h2>
+                    <button @click="openEditor" class="btn-modern bg-white/10 hover:bg-white/20 border border-white/10 px-3 py-1.5 rounded-lg text-xs font-medium flex items-center transition-colors">
+                        <i class="fas fa-edit mr-2 text-green-400"></i> В редактор
+                    </button>
+                </div>
                 <div v-if="!isWaiting" class="flex items-center gap-3 text-sm">
                     <span class="text-gray-500">Раунд</span>
                     <button @click="changeRound(-1)" class="btn-modern w-8 h-8 bg-white/5 rounded-lg">−</button>
@@ -439,13 +444,23 @@ const HostPanel = {
             }
         };
 
+        const openEditor = () => {
+            const lb = sync.lobby;
+            const key = sync.getSavedKey();
+            if (key) {
+                window.open(APP_CONFIG.pageUrl('editor.html', { key }), '_blank');
+            } else {
+                window.open('editor.html', '_blank');
+            }
+        };
+
         return {
             localState, searchQuery, quickScores, canUndo, filteredQuestions,
             isWaiting, canStart, lobbyInfo, syncSetupTeams, startGame,
             syncState, changeScore, adjustRound, transferScore, stealRound,
             setStrikes, addStrike, toggleAnswer, revealAll, hideAll,
             loadQuestion, nextQuestion, newRound, changeRound, setActiveTeam,
-            undoAction, isUsed, questionClass, resetGame
+            undoAction, isUsed, questionClass, resetGame, openEditor
         };
     }
 };
